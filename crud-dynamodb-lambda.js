@@ -44,7 +44,7 @@ export const handler = async (event) => {
 
 const createItem = async(event) => {
   try {
-    const { courseCode, teacherName, courseName, month, year, students } = event.body;
+    const { courseCode, teacherName, courseName, month, year, students } = (typeof event.body === 'string' ? JSON.parse(event.body) : event.body);
     const params = {
       TableName: tableName,
       Item: {
@@ -67,13 +67,13 @@ const createItem = async(event) => {
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message})
+      body: JSON.stringify({ error: error.message + JSON.stringify(event)})
     };
   }
 }
 
 const updateItem = async (event) => {
-  const { courseCode, teacherName, courseName, month, year, students } = event.body;
+  const { courseCode, teacherName, courseName, month, year, students } = (typeof event.body === 'string' ? JSON.parse(event.body) : event.body);
   try {
     const params = {
       TableName: tableName,
